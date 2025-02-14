@@ -3,19 +3,18 @@ from tkinter import ttk
 
 def handleButtonClick(button):
     current_text = result_var.get()
-    temp = 1
     if button == "=":
         try:
             expression = current_text.replace("÷", "/").replace("x", "*")
-            result,temp = eval(expression)
+            result = eval(expression)
             
+            # this will just make ints not have .0
             if result.is_integer():
                 result = int(result)
             
             result_var.set(result)
         except Exception as e:
             result_var.set("Error")
-            print(temp) # wont print answer
     elif button == "C":
         result_var.set("")
     elif button == "%":
@@ -37,7 +36,9 @@ def handleButtonClick(button):
 root = tk.Tk()
 root.title("Simple Calculator") # change title of app
 
+# result_var is equal to the string in the text field
 result_var = tk.StringVar()
+
 # result text field
 result_entry = ttk.Entry(root, textvariable = result_var, font = ("Helvetica", 24), justify = "right")
 result_entry.grid(row = 0, column = 0, columnspan = 4, sticky = "nsew")
@@ -51,6 +52,7 @@ buttons = [
     ("0", 5, 0, 2), (".", 5, 2), ("=", 5, 3)
 ]
 
+# gui styling
 style = ttk.Style()
 style.theme_use('default')
 style.configure("TButton", font = ("Helvetica", 16), width = 10, height = 4)
@@ -58,7 +60,7 @@ style.configure("TButton", font = ("Helvetica", 16), width = 10, height = 4)
 # placing buttons onto window
 for button in buttons:
     button_text, row, col = button[:3]
-    colspan = button[3] if len(button) > 3 else 1
+    colspan = button[3] if len(button) > 3 else 1 # ternary operator
     btn = ttk.Button(root, text = button_text, command = lambda text = button_text: handleButtonClick(text), style = "TButton")
     btn.grid(row = row, column = col, columnspan = colspan, sticky = "nsew", ipadx = 10, ipady = 4, padx = 5, pady = 5)
 
@@ -72,7 +74,9 @@ for i in range(4):
 root.bind("<Return>", lambda event: handleButtonClick("="))
 root.bind("<BackSpace>", lambda event: handleButtonClick("C"))
 
+# window sizing & making it static
 root.geometry("500x700")
 root.resizable(False, False)
 
+# runs the main loop
 root.mainloop()
