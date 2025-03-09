@@ -9,7 +9,8 @@ def handleButtonClick(button):
             result = eval(expression)
             
             # this will just make ints not have .0
-            if result.is_integer():
+            # checks to see if the result is a float value because ints do not have a is_integer() method.
+            if isinstance(result, float) and result.is_integer():
                 result = int(result)
             
             result_var.set(result)
